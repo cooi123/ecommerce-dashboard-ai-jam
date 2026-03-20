@@ -8,9 +8,7 @@ info:
     email: support@ecommerce-analytics.com
 
 servers:
-  - url: http://localhost:3000/api/v1
-    description: Local development server
-  - url: https://api.ecommerce-analytics.com/v1
+  - url: https://application-70.27lhfnrwxf3v.us-south.codeengine.appdomain.cloud/api/v1/
     description: Production server
 
 tags:

@@ -314,7 +314,7 @@ function displayTransactions() {
 }
 
 // Initialize dashboard
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     // Initialize tabs
     initTabs();
     initModal();
@@ -329,25 +329,33 @@ document.addEventListener('DOMContentLoaded', function() {
     displayTopProducts();
     displayTransactions();
     
-    // Initialize pricing tab
+    // Fetch products and initialize pricing tab
+    await fetchProducts();
     displayPricingTable();
 });
 
 // Made with Bob
 
-// Extended product data with pricing
-const productsData = [
-    { id: 'prod-001', name: 'Wireless Headphones', category: 'Electronics', price: 99.99, promoPrice: 99.99, stock: 150 },
-    { id: 'prod-002', name: 'Smart Watch', category: 'Electronics', price: 199.99, promoPrice: 199.99, stock: 85 },
-    { id: 'prod-003', name: 'Laptop Stand', category: 'Electronics', price: 49.99, promoPrice: 49.99, stock: 200 },
-    { id: 'prod-004', name: 'USB-C Cable', category: 'Electronics', price: 19.99, promoPrice: 19.99, stock: 500 },
-    { id: 'prod-005', name: 'Phone Case', category: 'Electronics', price: 24.99, promoPrice: 24.99, stock: 300 },
-    { id: 'prod-006', name: 'Bluetooth Speaker', category: 'Electronics', price: 79.99, promoPrice: 79.99, stock: 120 },
-    { id: 'prod-007', name: 'Wireless Mouse', category: 'Electronics', price: 34.99, promoPrice: 34.99, stock: 250 },
-    { id: 'prod-008', name: 'Keyboard', category: 'Electronics', price: 89.99, promoPrice: 89.99, stock: 180 },
-    { id: 'prod-009', name: 'Webcam', category: 'Electronics', price: 69.99, promoPrice: 69.99, stock: 95 },
-    { id: 'prod-010', name: 'Monitor Stand', category: 'Electronics', price: 54.99, promoPrice: 54.99, stock: 140 }
-];
+// Extended product data with pricing - will be loaded dynamically from API
+let productsData = [];
+
+// Fetch products from API
+async function fetchProducts() {
+    try {
+        const response = await fetch('/api/v1/products/top?limit=50');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const products = await response.json();
+        productsData = products;
+        return products;
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        // Fallback to empty array if API fails
+        productsData = [];
+        return [];
+    }
+}
 
 // Tab switching functionality
 function initTabs() {
@@ -445,12 +453,8 @@ async function handlePriceUpdate(event) {
         if (response.ok) {
             const result = await response.json();
             
-            // Update local data
-            const product = productsData.find(p => p.id === productId);
-            if (product) {
-                product.price = newPrice;
-                product.promoPrice = newPrice;
-            }
+            // Refresh products from API to get latest data
+            await fetchProducts();
             
             // Refresh table
             displayPricingTable();

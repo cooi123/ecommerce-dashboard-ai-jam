@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  ecommerce-dashboard:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount volume for persistent data storage
+      - sales-data:/app/data
+    environment:
+      - NODE_ENV=production
+      - DATA_FILE=/app/data/sales-data.json
+    restart: unless-stopped
+
+volumes:
+  # Named volume for persistent storage
+  sales-data:
+    driver: local
+
+# Made with Bob

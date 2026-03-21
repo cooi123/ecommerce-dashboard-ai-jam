@@ -8,6 +8,8 @@ info:
     email: support@ecommerce-analytics.com
 
 servers:
+  - url: http://localhost:3000/api/v1/
+    description: Dev
   - url: https://application-70.27lhfnrwxf3v.us-south.codeengine.appdomain.cloud/api/v1/
     description: Production server
 
@@ -27,16 +29,18 @@ paths:
       tags:
         - Sales
       summary: Get monthly sales data
-      description: Returns revenue and order count for each month
+      description: Returns revenue and order count for each month. Supports historical data for 2024, 2025, and 2026 (Jan-Mar). Includes notes about Australian special events affecting sales. Includes the vistor on the site
       operationId: getMonthlySales
       parameters:
         - name: year
           in: query
-          description: Year to filter sales data
+          description: Year to filter sales data (2024, 2025, or 2026)
           required: false
           schema:
-            type: integer
-            example: 2024
+            type: string
+            enum: ['2024', '2025', '2026']
+            default: '2026'
+            example: '2024'
       responses:
         '200':
           description: Successful response
@@ -45,6 +49,9 @@ paths:
               schema:
                 type: object
                 properties:
+                  year:
+                    type: string
+                    example: "2024"
                   months:
                     type: array
                     items:
@@ -54,14 +61,120 @@ paths:
                     type: array
                     items:
                       type: number
-                    example: [45000, 52000, 48000]
+                    example: [95000, 82000, 88000]
                   orders:
                     type: array
                     items:
                       type: integer
-                    example: [450, 520, 480]
+                    example: [950, 820, 880]
+                  notes:
+                    type: object
+                    additionalProperties:
+                      type: string
+                    example:
+                      January: "Post-Boxing Day sales boost, Australia Day (Jan 26)"
+                      June: "EOFY sales (End of Financial Year June 30)"
         '400':
           description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /sales/yearly-comparison:
+    get:
+      tags:
+        - Sales
+      summary: Compare sales across years
+      description: Returns aggregated sales comparison for 2024, 2025, and 2026. Shows 2025 as worst performing year.
+      operationId: getYearlyComparison
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  comparison:
+                    type: object
+                    additionalProperties:
+                      type: object
+                      properties:
+                        totalRevenue:
+                          type: number
+                          example: 1330000
+                        totalOrders:
+                          type: integer
+                          example: 13300
+                        avgMonthlyRevenue:
+                          type: number
+                          example: 110833.33
+                        monthsRecorded:
+                          type: integer
+                          example: 12
+                  availableYears:
+                    type: array
+                    items:
+                      type: string
+                    example: ["2024", "2025", "2026"]
+        '404':
+          description: Yearly data not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /sales/events:
+    get:
+      tags:
+        - Sales
+      summary: Get Australian special events
+      description: Returns Australian special events (Boxing Day, Australia Day, Easter, EOFY, etc.) that impact sales patterns
+      operationId: getSalesEvents
+      parameters:
+        - name: year
+          in: query
+          description: Year to filter events
+          required: false
+          schema:
+            type: string
+            enum: ['2024', '2025', '2026']
+            example: '2024'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  year:
+                    type: string
+                    example: "2024"
+                  events:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date:
+                          type: string
+                          format: date
+                          example: "2024-01-26"
+                        event:
+                          type: string
+                          example: "Australia Day"
+                        impact:
+                          type: string
+                          enum: [low, medium, high, very_high]
+                          example: "high"
+                  availableYears:
+                    type: array
+                    items:
+                      type: string
+                    example: ["2024", "2025", "2026"]
+        '404':
+          description: Events data not available
           content:
             application/json:
               schema:
@@ -121,6 +234,76 @@ paths:
                       Electronics: 285000
                       Clothing: 198000
                       "Home & Garden": 156000
+
+  /products:
+    post:
+      tags:
+        - Products
+      summary: Create a new product
+      description: Creates a new product in the catalog. Useful for creating product bundles or adding new items.
+      operationId: createProduct
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - category
+                - price
+                - stock
+              properties:
+                name:
+                  type: string
+                  description: Product name
+                  example: "Premium Bundle Pack"
+                category:
+                  type: string
+                  description: Product category
+                  example: "Electronics"
+                price:
+                  type: number
+                  description: Product price
+                  example: 149.99
+                  minimum: 0
+                stock:
+                  type: integer
+                  description: Available stock quantity
+                  example: 100
+                  minimum: 0
+                description:
+                  type: string
+                  description: Product description
+                  example: "Bundle of wireless headphones and bluetooth speaker"
+                rating:
+                  type: number
+                  description: Product rating (0-5)
+                  example: 4.5
+                  minimum: 0
+                  maximum: 5
+      responses:
+        '201':
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Product created successfully"
+                  product:
+                    $ref: '#/components/schemas/ProductDetail'
+        '400':
+          description: Bad request - Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /products/top:
     get:

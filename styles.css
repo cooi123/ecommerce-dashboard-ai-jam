@@ -578,3 +578,230 @@ tbody tr:last-child td {
 .btn-secondary:hover {
     background: #e5e7eb;
 }
+
+/* Year Filter Styles */
+.year-filter-container {
+    background: white;
+    padding: 20px 40px;
+    margin: 0 40px 24px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.year-filter-container label {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.year-filter-container select {
+    padding: 8px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1e293b;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.year-filter-container select:hover {
+    border-color: #3b82f6;
+}
+
+.year-filter-container select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.year-note {
+    color: #64748b;
+    font-size: 14px;
+    font-style: italic;
+}
+
+/* Yearly Comparison Styles */
+.comparison-container {
+    padding: 0 40px 40px;
+}
+
+.comparison-header {
+    margin-bottom: 32px;
+}
+
+.comparison-header h2 {
+    font-size: 1.75rem;
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+.comparison-header p {
+    color: #64748b;
+    font-size: 1rem;
+}
+
+.comparison-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.comparison-card {
+    background: white;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-top: 4px solid #3b82f6;
+}
+
+.comparison-card h3 {
+    font-size: 1.25rem;
+    color: #1e293b;
+    margin-bottom: 20px;
+}
+
+.comparison-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.metric {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.metric-label {
+    color: #64748b;
+    font-size: 0.875rem;
+}
+
+.metric-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.year-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.year-2024 {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.year-2025 {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.year-2026 {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+/* Events Styles */
+.events-container {
+    margin-top: 32px;
+}
+
+.events-container h2 {
+    font-size: 1.5rem;
+    color: #1e293b;
+    margin-bottom: 24px;
+}
+
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.events-year {
+    background: white;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.events-year h3 {
+    font-size: 1.125rem;
+    color: #1e293b;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.event-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 6px;
+    background: #f8fafc;
+    border-left: 3px solid #cbd5e1;
+}
+
+.event-item.impact-very_high {
+    border-left-color: #dc2626;
+    background: #fef2f2;
+}
+
+.event-item.impact-high {
+    border-left-color: #f59e0b;
+    background: #fffbeb;
+}
+
+.event-item.impact-medium {
+    border-left-color: #3b82f6;
+    background: #eff6ff;
+}
+
+.event-item.impact-low {
+    border-left-color: #94a3b8;
+    background: #f8fafc;
+}
+
+.event-date {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #64748b;
+    min-width: 60px;
+}
+
+.event-name {
+    flex: 1;
+    font-size: 0.875rem;
+    color: #1e293b;
+    font-weight: 500;
+}
+
+.event-impact {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    border-radius: 12px;
+    background: #e2e8f0;
+    color: #475569;
+    text-transform: capitalize;
+    font-weight: 500;
+}

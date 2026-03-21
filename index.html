@@ -22,13 +22,21 @@
         </header>
 
         <div id="analytics-tab" class="tab-content active">
+        <div class="year-filter-container">
+            <label for="yearFilter">Select Year:</label>
+            <select id="yearFilter" onchange="handleYearChange()">
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026" selected>2026 (Current)</option>
+            </select>
+            <span id="yearNote" class="year-note"></span>
+        </div>
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon">💰</div>
                 <div class="stat-content">
                     <h3>Total Revenue</h3>
                     <p class="stat-value" id="totalRevenue">$0</p>
-                    <span class="stat-change positive">+12.5% from last period</span>
                 </div>
             </div>
 
